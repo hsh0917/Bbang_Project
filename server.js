@@ -8,15 +8,13 @@ import { schema } from "./data/schema";
 const express = require("express");
 const server = express();
 const PORT = 4000;
+const url = process.env.DATABASEURL;
 
 // mongoose.connect("mongodb://localhost/miruku", function(err) {
-mongoose.connect(
-  "mongodb://bbang:0320@ds123490.mlab.com:23490/miruku",
-  function(err) {
-    if (err) throw err;
-    console.log("Successfully connected");
-  }
-);
+mongoose.connect(url, function(err) {
+  if (err) throw err;
+  console.log("Successfully connected");
+});
 
 const productSchema = mongoose.Schema({
   imagePath: Array,
