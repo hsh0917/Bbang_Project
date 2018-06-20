@@ -6,11 +6,11 @@ import mongoose from "mongoose";
 import { schema } from "./data/schema";
 
 const express = require("express");
+const path = require("path");
 const server = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 5000;
 const url = process.env.DATABASEURL;
 
-// mongoose.connect("mongodb://localhost/miruku", function(err) {
 mongoose.connect(url, function(err) {
   if (err) throw err;
   console.log("Successfully connected");
@@ -35,7 +35,8 @@ const orderSchema = mongoose.Schema({
 const Product = mongoose.model("Product", productSchema);
 const Order = mongoose.model("Order", orderSchema);
 
-server.use("*", cors({ origin: "http://localhost:3000" }));
+server.use(cors());
+
 server.use(
   "/graphql",
   bodyParser.json(),
@@ -49,8 +50,19 @@ server.use(
   })
 );
 
-server.get("/", function(req, res) {
-  res.send("This is the Welcome Page!");
+server.use(express.static(path.join(__dirname, "client/build")));
+
+server.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
+server.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
 server.listen(PORT, () =>
