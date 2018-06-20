@@ -2,7 +2,8 @@ import React from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import "./ProductsList.css";
-import { BrowserRouter, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { Element } from "react-scroll";
 
 const productsListQuery = gql`
   query ProductListQuery {
@@ -29,8 +30,12 @@ const ProductsList = props => (
       return (
         <div className="container content-shop" id="content-shop">
           <div className="jumbotron">
-            <h1>* SHOP *</h1>
-            <h2>Everyone deserves more delicious dessert</h2>
+            <Element name="scrollToShop">
+              <h1>SHOP</h1>
+            </Element>
+            <p className="divider-line">
+              Everyone deserves more delicious dessert
+            </p>
           </div>
           <div className="row" id="product-thumb">
             {data.products.map((product, index) => (
